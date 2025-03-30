@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - HR Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .glass-card {
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-800 dark:to-gray-900 min-h-screen flex p-4">
+  <!-- Standard Sidebar -->
+  <div class="hidden md:flex md:flex-shrink-0">
+    <div class="flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
+      <div class="h-0 flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+        <div class="flex-shrink-0 flex items-center px-4">
+          <h1 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">HR Portal</h1>
+        </div>
+        <nav class="mt-5 flex-1 px-2 space-y-1">
+          <a href="/index.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
+          </a>
+          <a href="/attendance.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-calendar-check mr-3"></i> Attendance
+          </a>
+          <a href="/timeoff.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-calendar-times mr-3"></i> Time Off
+          </a>
+          <a href="/history.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-history mr-3"></i> History
+          </a>
+          <a href="/profile.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-user mr-3"></i> Profile
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Login Content -->
+  <div class="flex-1 flex items-center justify-center">
+  <div class="glass-card bg-white/50 dark:bg-gray-800/50 rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div class="text-center mb-8">
+      <i class="fas fa-user-shield text-5xl text-indigo-600 dark:text-indigo-400 mb-4"></i>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">HR Dashboard Login</h1>
+    </div>
+      <form id="loginForm" class="space-y-6">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+        <input type="email" id="email" autocomplete="username" required 
+               class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div class="relative">
+        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+        <input type="password" id="password" autocomplete="current-password" required 
+               class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-10">
+        <button type="button" id="togglePassword" class="absolute right-3 top-9 text-gray-500 dark:text-gray-400">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+      <button type="submit" id="loginButton" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+        <span id="loginText">Sign In</span>
+        <svg id="loginSpinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const password = document.getElementById('password');
+      const icon = this.querySelector('i');
+      if (password.type === 'password') {
+        password.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        password.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    });
+
+    // Handle login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Show loading state
+      document.getElementById('loginText').classList.add('hidden');
+      document.getElementById('loginSpinner').classList.remove('hidden');
+      document.getElementById('loginButton').disabled = true;
+      
+      // Simulate API call
+      setTimeout(() => {
+        // In a real app, you would validate and send to backend
+        localStorage.setItem('userEmail', email);
+      window.location.href = '/index.html';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
