@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance - HR Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .glass-card {
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .glass-card-dark {
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      border: 1px solid rgba(0, 0, 0, 0.18);
+    }
+    .calendar-day {
+      transition: all 0.2s ease;
+    }
+    .calendar-day:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="h-screen flex bg-gray-50 dark:bg-gray-900">
+  <!-- Sidebar -->
+  <div class="hidden md:flex md:flex-shrink-0">
+    <div class="flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
+      <div class="h-0 flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+        <!-- Sidebar content -->
+        <div class="flex-shrink-0 flex items-center px-4">
+          <h1 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">HR Portal</h1>
+        </div>
+        <nav class="mt-5 flex-1 px-2 space-y-1">
+          <a href="/index.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-tachometer-alt mr-3"></i>
+            Dashboard
+          </a>
+          <a href="/attendance.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md bg-indigo-50 text-indigo-600 dark:bg-gray-700 dark:text-indigo-300">
+            <i class="fas fa-calendar-check mr-3"></i>
+            Attendance
+          </a>
+          <a href="/timeoff.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-calendar-times mr-3"></i>
+            Time Off
+          </a>
+          <a href="/history.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-history mr-3"></i>
+            History
+          </a>
+          <a href="/profile.html" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-user mr-3"></i>
+            Profile
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col w-0 flex-1 overflow-hidden">
+    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        <h1 class="text-lg font-semibold text-gray-800 dark:text-white">
+          <i class="fas fa-calendar-check mr-2 text-indigo-600 dark:text-indigo-400"></i>
+          Attendance
+        </h1>
+        <div class="flex items-center space-x-4">
+          <button class="p-2 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+            <i class="fas fa-bell"></i>
+          </button>
+          <div class="flex items-center">
+            <div class="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+              <i class="fas fa-user text-indigo-600 dark:text-indigo-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6 overflow-y-auto">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Calendar -->
+          <div class="glass-card dark:glass-card-dark bg-glass dark:bg-glass-dark rounded-2xl shadow-lg p-6 lg:col-span-2">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-semibold text-indigo-800 dark:text-indigo-200">
+                June 2023
+              </h2>
+              <div class="flex space-x-2">
+                <button class="p-2 rounded-lg bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-300">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="p-2 rounded-lg bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-300">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-cols-7 gap-2 text-center">
+              <div class="text-sm font-medium text-gray-500 dark:text-gray-400 py-2">Sun</div>
+              <div class="text-sm font-medium text-gray-500 dark:text-gray-400 py-2">Mon</div>
+              <div class="text-sm font-medium text-gray-500 dark:text-gray-400 py-2">Tue</div>
+              <div class="text-sm font-medium text-gray-500 dark:text-gray-400 py-2">Wed</div>
+              <div class="text-sm font-medium text-gray-500 dark:text-gray-400 py-2">Thu</div>
+              <div class="text-sm font-medium text-gray-500 dark:text-gray-400 py-2">Fri</div>
+              <div class="text-sm font-medium text-gray-500 dark:text-gray-400 py-2">Sat</div>
+              
+              <!-- Enhanced Calendar days -->
+              <template x-for="day in days" :key="day">
+                <div class="calendar-day p-2 rounded-lg flex flex-col items-center cursor-pointer"
+                  :class="{
+                    'bg-indigo-100 dark:bg-indigo-900/50': day === currentDay,
+                    'bg-green-100 dark:bg-green-900/20': attendanceRecords[day] === 'present',
+                    'bg-yellow-100 dark:bg-yellow-900/20': attendanceRecords[day] === 'late',
+                    'bg-red-100 dark:bg-red-900/20': attendanceRecords[day] === 'absent',
+                    'hover:bg-gray-100 dark:hover:bg-gray-700': !attendanceRecords[day]
+                  }"
+                  @click="showDayDetails(day)">
+                  <span class="text-sm" 
+                    :class="{
+                      'font-bold text-indigo-600 dark:text-indigo-300': day === currentDay,
+                      'text-gray-700 dark:text-gray-300': day !== currentDay
+                    }" x-text="day"></span>
+                  <div class="mt-1">
+                    <template x-if="attendanceRecords[day] === 'present'">
+                      <i class="fas fa-check text-green-500 text-xs"></i>
+                    </template>
+                    <template x-if="attendanceRecords[day] === 'late'">
+                      <i class="fas fa-clock text-yellow-500 text-xs"></i>
+                    </template>
+                    <template x-if="attendanceRecords[day] === 'absent'">
+                      <i class="fas fa-times text-red-500 text-xs"></i>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- Check-in/out Panel -->
+          <div class="space-y-6">
+            <div class="glass-card dark:glass-card-dark bg-glass dark:bg-glass-dark rounded-2xl shadow-lg p-6">
+              <h2 class="text-lg font-semibold text-indigo-800 dark:text-indigo-200 mb-4">
+                Time Tracking
+              </h2>
+              <div class="text-center mb-4">
+                <div class="text-4xl font-mono font-bold dark:text-white" id="liveClock">00:00:00</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400" id="currentDate">Loading...</div>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-4">
+                <button id="checkInBtn" class="py-3 px-4 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition flex items-center justify-center">
+                  <i class="fas fa-sign-in-alt mr-2"></i> Check In
+                </button>
+                <button id="checkOutBtn" class="py-3 px-4 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition flex items-center justify-center" disabled>
+                  <i class="fas fa-sign-out-alt mr-2"></i> Check Out
+                </button>
+              </div>
+              
+              <div class="mt-4">
+                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1">Notes (optional)</label>
+                <textarea id="attendanceNotes" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white/50 dark:bg-gray-700/50" rows="2" placeholder="Any special circumstances?"></textarea>
+              </div>
+              
+              <div class="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                <i class="fas fa-map-marker-alt mr-1"></i>
+                <span id="locationStatus">Detecting location...</span>
+              </div>
+            </div>
+
+            <!-- Stats Summary -->
+            <div class="glass-card dark:glass-card-dark bg-glass dark:bg-glass-dark rounded-2xl shadow-lg p-6">
+              <h2 class="text-lg font-semibold text-indigo-800 dark:text-indigo-200 mb-4">
+                This Month
+              </h2>
+              <div class="space-y-4">
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Days Worked</p>
+                  <p class="text-2xl font-bold dark:text-white">18/22</p>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">On Time Arrivals</p>
+                  <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div class="bg-green-500 h-2.5 rounded-full" style="width: 85%"></div>
+                  </div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">85% on time</p>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Average Hours/Day</p>
+                  <p class="text-xl font-bold dark:text-white">8.2</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Statistics Charts -->
+          <div class="glass-card dark:glass-card-dark bg-glass dark:bg-glass-dark rounded-2xl shadow-lg p-6 lg:col-span-3 mt-6">
+            <h2 class="text-lg font-semibold text-indigo-800 dark:text-indigo-200 mb-4">
+              Attendance Trends
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <canvas id="weeklyChart" height="200"></canvas>
+              </div>
+              <div>
+                <canvas id="punctualityChart" height="200"></canvas>
+              </div>
+            </div>
+            
+            <!-- Export Options -->
+            <div class="mt-6 flex flex-wrap gap-3">
+              <button onclick="exportToPDF()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition flex items-center">
+                <i class="fas fa-file-pdf mr-2"></i> Export PDF
+              </button>
+              <button onclick="exportToCSV()" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition flex items-center">
+                <i class="fas fa-file-csv mr-2"></i> Export CSV
+              </button>
+              <button onclick="printReport()" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition flex items-center">
+                <i class="fas fa-print mr-2"></i> Print
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Simple calendar data
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentDate = new Date();
+      const currentDay = currentDate.getDate();
+      
+      // Generate days for current month
+      const daysInMonth = new Date(
+        currentDate.getFullYear(), 
+        currentDate.getMonth() + 1, 
+        0
+      ).getDate();
+      
+      const days = Array.from({length: daysInMonth}, (_, i) => i + 1);
+      
+      // For demo purposes - in a real app you would use a proper calendar library
+      // Initialize attendance data
+      const attendanceRecords = {
+        1: 'present', 2: 'present', 3: 'late', 4: 'present',
+        5: 'absent', 6: 'present', 7: 'present', 8: 'present',
+        9: 'late', 10: 'present', 11: 'present', 12: 'present',
+        13: 'present', 14: 'absent', 15: 'present', 16: 'present',
+        17: 'present', 18: 'late', 19: 'present', 20: 'present',
+        21: 'present', 22: 'present', 23: 'present', 24: 'absent',
+        25: 'present', 26: 'present', 27: 'present', 28: 'present',
+        29: 'late', 30: 'present'
+      };
+
+      function showDayDetails(day) {
+        const status = attendanceRecords[day] || 'no record';
+        const statusMap = {
+          'present': 'Present',
+          'late': 'Arrived Late',
+          'absent': 'Absent',
+          'no record': 'No record'
+        };
+        alert(`Day ${day}:\nStatus: ${statusMap[status]}\nClick time: ${new Date().toLocaleTimeString()}`);
+      }
+
+      // Live clock functionality
+      function updateClock() {
+        const now = new Date();
+        document.getElementById('liveClock').textContent = 
+          now.toLocaleTimeString();
+        document.getElementById('currentDate').textContent = 
+          now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      // Check-in/out functionality
+      const checkInBtn = document.getElementById('checkInBtn');
+      const checkOutBtn = document.getElementById('checkOutBtn');
+      const attendanceNotes = document.getElementById('attendanceNotes');
+      
+      checkInBtn.addEventListener('click', () => {
+        const notes = attendanceNotes.value;
+        const time = new Date().toLocaleTimeString();
+        alert(`Checked in at ${time}\nNotes: ${notes || 'None'}`);
+        checkInBtn.disabled = true;
+        checkOutBtn.disabled = false;
+        // In real app, would send to server
+      });
+
+      checkOutBtn.addEventListener('click', () => {
+        const time = new Date().toLocaleTimeString();
+        alert(`Checked out at ${time}`);
+        checkInBtn.disabled = false;
+        checkOutBtn.disabled = true;
+        // In real app, would send to server
+      });
+
+      // Mock location detection
+      setTimeout(() => {
+        document.getElementById('locationStatus').textContent = 
+          'Location: Office (100 Main St)';
+      }, 1500);
+
+      // Initialize charts
+      const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+      new Chart(weeklyCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [{
+            label: 'Hours Worked',
+            data: [40, 38, 42, 35],
+            backgroundColor: 'rgba(79, 70, 229, 0.7)'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      const punctualityCtx = document.getElementById('punctualityChart').getContext('2d');
+      new Chart(punctualityCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['On Time', 'Late', 'Early'],
+          datasets: [{
+            data: [85, 10, 5],
+            backgroundColor: [
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(239, 68, 68, 0.7)',
+              'rgba(234, 179, 8, 0.7)'
+            ]
+          }]
+        }
+      });
+
+      // Export functions
+      function exportToPDF() {
+        alert('PDF export would be generated here');
+        // In real app, would generate PDF report
+      }
+
+      function exportToCSV() {
+        alert('CSV export would be generated here');
+        // In real app, would generate CSV data
+      }
+
+      function printReport() {
+        window.print();
+      }
+
+      console.log('Calendar initialized', {currentDay, days});
+    });
+  </script>
+  
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-6 right-6 p-3 bg-indigo-600 text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-indigo-700">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // Back to Top Button
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.classList.remove('opacity-0', 'invisible');
+        backToTopBtn.classList.add('opacity-100', 'visible');
+      } else {
+        backToTopBtn.classList.add('opacity-0', 'invisible');
+        backToTopBtn.classList.remove('opacity-100', 'visible');
+      }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Smooth scrolling for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
